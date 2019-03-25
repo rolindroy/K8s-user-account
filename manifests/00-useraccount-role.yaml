@@ -1,0 +1,9 @@
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  namespace: CUSTOM_NAMESPACE
+  name: CUSTOM_USERNAME
+rules:
+- apiGroups: ["", "extentions", "apps"]
+  resources: ["deployments", "replicasets", "pods"]
+  verbs: ["get", "ist", "watch", "create", "update", "patch", "delete"] # You can also use ["*"]

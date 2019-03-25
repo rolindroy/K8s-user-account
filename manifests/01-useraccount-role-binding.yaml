@@ -1,0 +1,13 @@
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  namespace: CUSTOM_NAMESPACE
+  name: CUSTOM_USERNAME-role-binding
+subjects:
+- kind: User
+  name: CUSTOM_USERNAME
+  apiGroup: ""
+roleRef:
+- kind: Role
+  name: CUSTOM_USERNAME-role
+  apiGroup: ""
