@@ -1,8 +1,7 @@
 
 #!/usr/bin/env bash
 
-# exit immediately when a command fails
-set -e
+# r
 # only exit with zero if all commands of the pipeline exit successfully
 set -o pipefail
 
@@ -46,7 +45,7 @@ echo -e "${BLUE} Creating ${ORANGE}${USERACCOUNT} ${BLUE}directory."
 mkdir -p ${SCRIPTDIR}/${USERACCOUNT} && cd ${USERACCOUNT}
 echo -e "${BLUE} Creating ${BLUE}private key for user account${ORANGE}${USERACCOUNT}"
 openssl genrsa -out ${USERACCOUNT}.key 2048 && \ 
-    openssl req -new ${USERACCOUNT}.key -out ${USERACCOUNT}.csr -subj "/CN=${USERACCOUNT} /O=${NAMESPACE}"
+    openssl req -new -key ${USERACCOUNT}.key -out ${USERACCOUNT}.csr -subj "/CN=${USERACCOUNT} /O=${NAMESPACE}"
 
 read -p "Enter the kubernetes CA Certs Path [$DEFAULT_CA_PATH]: " CA_PATH
 CA_PATH=${CA_PATH:-$DEFAULT_CA_PATH}
@@ -64,4 +63,3 @@ done
 kctl create -f ${SCRIPTDIR}/manifests/*
 kubectl config set-credentials ${USERACCOUNT} --client-certificate=${SCRIPTDIR}/${USERACCOUNT}/${USERACCOUNT}.crt \ 
     --client-key=${SCRIPTDIR}/${USERACCOUNT}/${USERACCOUNT}.key
-    
