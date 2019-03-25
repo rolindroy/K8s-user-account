@@ -53,7 +53,7 @@ tput sgr0
 
 echo -e "${BLUE} Signing certificate with ${ORANGE}${CA_PATH}/ca.crt ${BLUE}directory."
 openssl x509 -req -in ${USERACCOUNT}.csr -CA ${CA_PATH}/ca.crt -CAkey ${CA_PATH}/ca.key -CAcreateserial -out ${USERACCOUNT}.crl -days 365
-
+cd ${SCRIPTDIR}
 # set namespace in various resources
 for n in $(egrep -lir --include=*.{yaml,sh} "CUSTOM_NAMESPACE" manifests); do
   sed -i -e 's,CUSTOM_NAMESPACE,'"${NAMESPACE}"',g' ${n}
