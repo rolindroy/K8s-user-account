@@ -10,7 +10,7 @@ set -o pipefail
 SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null && pwd)"
 DEFAULT_NAMESPACE=webapplication
 DEFAULT_USERACCOUNT=developer
-DEFAULT_CA_PATH=/etc/kubernetes/pki/
+DEFAULT_CA_PATH=/etc/kubernetes/pki
 
 
 RED='\033[0;31m'
@@ -33,7 +33,7 @@ kubectl create namespace "$NAMESPACE"
 
 # kubectl command
 kctl() {
-    kubectl --namespace "$NAMESPACE" "$@"
+    kubectl "$@"
 }
 
 # user account
