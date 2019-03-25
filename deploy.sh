@@ -44,8 +44,8 @@ tput sgr0
 echo -e "${BLUE} Creating ${ORANGE}${USERACCOUNT} ${BLUE}directory."
 mkdir -p ${SCRIPTDIR}/${USERACCOUNT} && cd ${USERACCOUNT}
 echo -e "${BLUE} Creating ${BLUE}private key for user account${ORANGE}${USERACCOUNT}"
-openssl genrsa -out ${USERACCOUNT}.key 2048 && \ 
-    openssl req -new -key ${USERACCOUNT}.key -out ${USERACCOUNT}.csr -subj "/CN=${USERACCOUNT} /O=${NAMESPACE}"
+openssl genrsa -out ${USERACCOUNT}.key 2048 
+openssl req -new -key ${USERACCOUNT}.key -out ${USERACCOUNT}.csr -subj "/CN=${USERACCOUNT} /O=${NAMESPACE}"
 
 read -p "Enter the kubernetes CA Certs Path [$DEFAULT_CA_PATH]: " CA_PATH
 CA_PATH=${CA_PATH:-$DEFAULT_CA_PATH}
@@ -55,11 +55,11 @@ echo -e "${BLUE} Signing certificate with ${ORANGE}${CA_PATH}/ca.crt ${BLUE}dire
 openssl x509 -req -in ${USERACCOUNT}.csr -CA ${CA_PATH}/ca.crt -CAkey ${CA_PATH}/ca.key -CAcreateserial -out ${USERACCOUNT}.crl -days 365
 
 # set namespace in various resources
-for n in $(egrep -lir --include=*.{yaml,sh} "CUSTOM_NAMESPACE" ${SCRIPTDIR}/manifests); do
+for n in $(egrep -lir --include=*.{yaml,sh} "CUSTOM_NAMESPACE" manifests); do
   sed -i -e 's,CUSTOM_NAMESPACE,'"${NAMESPACE}"',g' ${n}
-  sed -i -e 's,CUSTOM_USERACCOUNT,'"${USERACCOUNT}"',g' ${n}
+  sed -i -e 's,CUSTOM_USERNAME,'"${USERACCOUNT}"',g' ${n}
 done
 
-kctl create -f ${SCRIPTDIR}/manifests/*
+kctl create -f ${SCRIPTDIR}/manifests/*.yaml
 kubectl config set-credentials ${USERACCOUNT} --client-certificate=${SCRIPTDIR}/${USERACCOUNT}/${USERACCOUNT}.crt \ 
     --client-key=${SCRIPTDIR}/${USERACCOUNT}/${USERACCOUNT}.key
